@@ -78,6 +78,13 @@ Each email arrives with the subject `Quote request: <company or name>` and
 goes straight to the customer. A `page_language` field records whether the
 enquiry came from the English or Amharic page.
 
+The request is sent as `FormData`, deliberately not as JSON. A JSON body sets
+`Content-Type: application/json`, which makes the cross-origin request
+"non-simple" and forces a CORS preflight; Web3Forms answers `OPTIONS` with a 403
+and no CORS headers. `FormData` is a simple request and skips the preflight
+altogether. Do not add a `Content-Type` header to that `fetch` — the browser has
+to set the multipart boundary itself.
+
 If Web3Forms is unreachable the form keeps everything the visitor typed and shows
 the email address instead, rather than discarding the enquiry. A hidden honeypot
 field (`website`) blocks basic bots and is stripped before sending.
@@ -86,6 +93,20 @@ Note: on the free tier the key cannot be restricted by domain, so anyone who
 copies it could use it to send mail to the same inbox. Web3Forms' domain
 whitelist is a paid feature. If that becomes a problem, the fix is to rotate the
 key and enable the restriction.
+
+### Cache busting
+
+`index.html` and `am/index.html` reference the stylesheet and script with a
+version query string (`styles.css?v=2`, `script.js?v=2`).
+
+GitHub Pages serves assets with `cache-control: max-age=600`, so a browser can
+hold an old `script.js` for ten minutes after a deploy. Fresh HTML paired with a
+stale script is the worst case: the new markup renders the status panel `hidden`
+and the old script does not know to unhide it, so the form appears to do nothing
+at all — no loading, no error, no success.
+
+**Bump the number in both files whenever you change `script.js` or `styles.css`.**
+It costs nothing and makes a deploy take effect immediately for everyone.
 
 ## Images
 

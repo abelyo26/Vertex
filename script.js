@@ -495,19 +495,28 @@
       setLoading(submitBtn, true, t('btnSending', 'Sending…'));
       say(t('msgSending', 'Sending your request…'), 'loading');
 
-      const payload = Object.assign({}, data, {
-        access_key: WEB3FORMS_KEY,
-        subject: 'Quote request: ' + (data.company || data.name || 'new enquiry'),
-        from_name: 'Vertex website',
-        replyto: data.email,                       // one word, per the Web3Forms API
-        page_language: document.documentElement.lang || 'en'
-      });
+      /* Sent as FormData, not JSON. A JSON body sets Content-Type:
+         application/json, which makes this a non-simple cross-origin
+         request and forces a CORS preflight; Web3Forms answers OPTIONS
+         with 403 and no CORS headers, so any preflight that is not
+         waved through fails the whole request. FormData is a simple
+         request and skips the preflight entirely. Accept is on the
+         CORS safelist, so it does not reintroduce one. Do not set
+         Content-Type here: the browser must add the multipart
+         boundary itself. */
+      const payload = new FormData(form);
+      payload.delete('website');                   // honeypot, never sent
+      payload.append('access_key', WEB3FORMS_KEY);
+      payload.append('subject', 'Quote request: ' + (data.company || data.name || 'new enquiry'));
+      payload.append('from_name', 'Vertex website');
+      payload.append('replyto', data.email);       // one word, per the Web3Forms API
+      payload.append('page_language', document.documentElement.lang || 'en');
 
       try {
         const res = await fetch(ENDPOINT, {
           method: 'POST',
-          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          headers: { 'Accept': 'application/json' },
+          body: payload
         });
 
         // Web3Forms documents the message at body.message but its own
