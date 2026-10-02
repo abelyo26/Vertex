@@ -1218,6 +1218,9 @@ h1, h2, h3 { line-height: 1.15; letter-spacing: -0.022em; font-weight: 700; }
   font-size: 0.95rem;
   transition: color 0.2s;
 }
+/* a block so several contact numbers stack rather than running together */
+.contact-details a { display: block; width: fit-content; }
+.contact-details a + a { margin-top: 2px; }
 .contact-details a:hover { color: var(--accent-bright); }
 
 /* form */

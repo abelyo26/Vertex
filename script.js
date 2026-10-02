@@ -344,7 +344,7 @@
      email client with everything pre-filled.
      ------------------------------------------------------------------ */
   const ENDPOINT = null;
-  const FALLBACK_EMAIL = 'info@vertex-trade.com';
+  const FALLBACK_EMAIL = 'verteximportexport.et@gmail.com';
 
   const form = document.getElementById('quoteForm');
   const status = document.getElementById('formStatus');
