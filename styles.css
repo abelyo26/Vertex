@@ -787,9 +787,28 @@ h1, h2, h3 { line-height: 1.15; letter-spacing: -0.022em; font-weight: 700; }
   overflow: hidden;
   box-shadow: var(--shadow);
 }
+.about-figure figcaption {
+  padding: 11px 14px 12px;
+  border-top: 1px solid var(--line);
+  background: var(--bg-alt);
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+.about-figure .credit {
+  display: block;
+  margin-top: 3px;
+  opacity: 0.72;
+  font-size: 0.72rem;
+}
+
 .about-figure img {
+  /* height must be stated. height:100% would fill the figure and let
+     overflow:hidden clip the caption; omitting height lets the img's
+     height="820" attribute win over aspect-ratio. auto is the fix. */
+  display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
   aspect-ratio: 4 / 3;
   object-fit: cover;
   filter: var(--photo-filter-tile);

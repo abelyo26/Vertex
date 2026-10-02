@@ -13,10 +13,14 @@ which aggregates openly licensed media.
 | `img/mode-air.*` | Aircraft being loaded on the apron | Rawpixel | CC0 |
 | `img/mode-road.*` | Haulage truck with container trailer | Rawpixel | CC0 |
 | `img/mode-warehouse.*` | Forklift moving palletised goods | Rawpixel | CC0 |
-| `img/about-port.*` | Aerial view of a working port | Rawpixel | CC0 |
+| `img/about-djibouti.*` | Container terminal at the Port of Djibouti | Wikimedia Commons, by Skilla1st | **CC BY-SA 4.0** |
 
-No attribution line is legally required, so none is rendered on the page. The
-table above exists so you can trace provenance later.
+Most of these are CC0 and need no attribution. **The Djibouti port photograph is
+the exception**: it is CC BY-SA 4.0, so it carries a visible credit in the caption
+under the About image, and the cropped version shares that licence. If you replace
+it with your own photograph, delete that credit line from both pages.
+
+Source page: https://commons.wikimedia.org/wiki/File:The_container_terminal_at_the_Port_of_Djibouti.jpg
 
 **Every photo is a generic stock image, not a Vertex facility.** Swap them for
 real photographs of your own operation as soon as you have them — nothing else
