@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.vertex-trade.com/sitemap.xml
+Sitemap: https://vertex.pro.et/sitemap.xml

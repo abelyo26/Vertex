@@ -38,8 +38,8 @@ Apply every change to **both** `index.html` and `am/index.html`.
 
 | Placeholder | Where |
 |---|---|
-| `https://www.vertex-trade.com` | both pages (canonical, hreflang, OG, JSON-LD), `robots.txt`, `sitemap.xml` |
-| `info@vertex-trade.com` | `index.html`, `script.js` (`FALLBACK_EMAIL`) |
+| ~~`https://www.vertex-trade.com`~~ | **Done** — now `https://vertex.pro.et` in both pages, `robots.txt`, `sitemap.xml` |
+| `info@vertex-trade.com` | both pages, `script.js` (`FALLBACK_EMAIL`) — still a placeholder |
 | `+1 (555) 010-0100` / `+15550100` | `index.html` (contact section, footer, JSON-LD) |
 | `1200 Harbor Gateway…` | `index.html` (contact section, JSON-LD `address`) |
 | Stats: `120+`, `15k+`, `99%` | `index.html` hero `data-to` attributes |
