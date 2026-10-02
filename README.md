@@ -58,17 +58,34 @@ your own operation when you can; it is the single biggest trust upgrade availabl
 to this page. Keep the same filenames and both formats (`.webp` + `.jpg`) and
 nothing else needs to change.
 
-## Making the contact form live
+## The contact form
 
-The form validates client-side and currently falls back to opening the visitor's
-email client. To receive submissions properly, set `ENDPOINT` at the top of the
-form section in `script.js` to a form backend URL:
+Submissions go to **Web3Forms**, which emails each one to
+`verteximportexport.et@gmail.com`. GitHub Pages only serves files and cannot send
+mail itself, so a third-party form backend is required; there is no server to run
+or maintain.
 
-- **Formspree** — `https://formspree.io/f/YOUR_ID`
-- **Web3Forms** — `https://api.web3forms.com/submit` (add an `access_key` field)
-- **Netlify Forms** — drop `ENDPOINT`, add `data-netlify="true"` to the `<form>`
+The access key sits in `script.js` (`WEB3FORMS_KEY`). It is public by design —
+Web3Forms state it is not a secret, since holding it only allows sending mail *to*
+that address, never reading anything. It is safe in a public repository.
 
-A hidden honeypot field (`website`) already blocks basic bots.
+To change where enquiries land, issue a new key at https://web3forms.com for the
+new address and replace the constant. The destination is not configured in this
+codebase.
+
+Each email arrives with the subject `Quote request: <company or name>` and
+**reply-to set to the enquirer's own address**, so replying in your mail client
+goes straight to the customer. A `page_language` field records whether the
+enquiry came from the English or Amharic page.
+
+If Web3Forms is unreachable the form keeps everything the visitor typed and shows
+the email address instead, rather than discarding the enquiry. A hidden honeypot
+field (`website`) blocks basic bots and is stripped before sending.
+
+Note: on the free tier the key cannot be restricted by domain, so anyone who
+copies it could use it to send mail to the same inbox. Web3Forms' domain
+whitelist is a paid feature. If that becomes a problem, the fix is to rotate the
+key and enable the restriction.
 
 ## Images
 

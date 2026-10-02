@@ -337,21 +337,21 @@
      ----------------------------------------------------- */
   /* ------------------------------------------------------------------
      DELIVERY
-     GitHub Pages only serves files, so it cannot send mail itself. The
-     form posts to Web3Forms, which emails each submission to the address
-     the access key was issued to.
+     GitHub Pages only serves files, so it cannot send mail itself.
+     Submissions post to Web3Forms, which forwards each one to
+     verteximportexport.et@gmail.com (the address this key is registered
+     to). Change the destination at https://web3forms.com by issuing a
+     new key; it is not set anywhere in this file.
 
-     TO SWITCH IT ON: get a free key at https://web3forms.com/#start
-     (enter verteximportexport.et@gmail.com; the key arrives by email),
-     then paste it below. The key is meant to be public — it only lets
-     someone send mail TO that address, and the Web3Forms docs state it
-     is not a secret.
+     The key is public by design. Web3Forms state it is not a secret:
+     holding it only lets someone send mail TO that address, never read
+     anything. It is therefore safe in this repository.
 
-     While the key is empty the form falls back to opening the visitor's
-     own email client with everything pre-filled, so it never silently
-     swallows an enquiry.
+     Blank the key and the form falls back to opening the visitor's own
+     email client with everything pre-filled, so it is never a silent
+     dead end.
      ------------------------------------------------------------------ */
-  const WEB3FORMS_KEY = '';                                  // <-- paste key here
+  const WEB3FORMS_KEY = 'a0e7e125-3a7f-492b-bbad-19cfc8aa99d0';
   const ENDPOINT = 'https://api.web3forms.com/submit';
   const FALLBACK_EMAIL = 'verteximportexport.et@gmail.com';
 
