@@ -715,7 +715,16 @@
         </ul>
       </div>
 
-      <form class="contact-form reveal" id="quoteForm" novalidate>
+      <form class="contact-form reveal" id="quoteForm" novalidate
+            data-msg-sending="ጥያቄዎ እየተላከ ነው…"
+            data-msg-success="እናመሰግናለን፤ ጥያቄዎ ደርሶናል። በአንድ የሥራ ቀን ውስጥ ምላሽ እንሰጣለን።"
+            data-msg-error="ጥያቄዎን መላክ አልቻልንም። እባክዎ በቀጥታ ኢሜይል ይላኩልን ወይም ከላይ ባሉት ስልኮች ይደውሉ።"
+            data-msg-offline="ከኢንተርኔት ግንኙነት የተቋረጡ ይመስላል። ግንኙነትዎን አረጋግጠው እንደገና ይሞክሩ።"
+            data-msg-invalid="እባክዎ ምልክት የተደረገባቸውን ሳጥኖች ያስተካክሉ።"
+            data-err-required="ይህ ሳጥን መሞላት አለበት።"
+            data-err-email="ትክክለኛ የኢሜይል አድራሻ ያስገቡ።"
+            data-err-short="እባክዎ ትንሽ ተጨማሪ ዝርዝር ይጻፉ።"
+            data-btn-sending="እየተላከ ነው…">
         <div class="field-row">
           <div class="field">
             <label for="name">ሙሉ ስም <span aria-hidden="true">*</span></label>
@@ -773,14 +782,15 @@
         </div>
 
         <button class="btn btn-primary btn-lg btn-block" type="submit">
-          ጥያቄ ይላኩ
+          <span class="btn-spinner" aria-hidden="true"></span>
+          <span class="btn-label">ጥያቄ ይላኩ</span>
           <svg viewBox="0 0 24 24" aria-hidden="true" class="btn-icon"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
 
         <p class="form-note">
           በአንድ የሥራ ቀን ውስጥ ምላሽ እንሰጣለን። መረጃዎ የሚውለው ዋጋዎን ለማዘጋጀት ብቻ ነው።
         </p>
-        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+        <div class="form-status" id="formStatus" role="status" aria-live="polite" hidden></div>
       </form>
     </div>
   </section>

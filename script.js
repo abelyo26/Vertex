@@ -360,6 +360,12 @@
 
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+  /* Every visitor-facing string lives on the <form> as a data-
+     attribute, so the English and Amharic pages can share this file. */
+  function t(key, fallback) {
+    return (form && form.dataset[key]) || fallback;
+  }
+
   function setError(field, message) {
     const msgEl = form.querySelector('[data-error-for="' + field.name + '"]');
     if (msgEl) msgEl.textContent = message || '';
@@ -371,25 +377,50 @@
     const value = field.value.trim();
 
     if (field.required && !value) {
-      setError(field, 'This field is required.');
+      setError(field, t('errRequired', 'This field is required.'));
       return false;
     }
     if (field.type === 'email' && value && !EMAIL_RE.test(value)) {
-      setError(field, 'Enter a valid email address.');
+      setError(field, t('errEmail', 'Enter a valid email address.'));
       return false;
     }
     if (field.name === 'message' && value && value.length < 12) {
-      setError(field, 'Please add a little more detail.');
+      setError(field, t('errShort', 'Please add a little more detail.'));
       return false;
     }
     setError(field, '');
     return true;
   }
 
-  function say(message, isError) {
+  /* kind: 'loading' | 'success' | 'error' | null (hide) */
+  function say(message, kind, extraHtml) {
     if (!status) return;
+
+    if (!message) {
+      status.hidden = true;
+      status.textContent = '';
+      status.className = 'form-status';
+      return;
+    }
+
+    status.className = 'form-status is-' + (kind || 'loading');
     status.textContent = message;
-    status.classList.toggle('is-error', !!isError);
+    if (extraHtml) status.insertAdjacentHTML('beforeend', extraHtml);
+    status.hidden = false;
+  }
+
+  function setLoading(btn, on, label) {
+    if (!btn) return;
+    const text = btn.querySelector('.btn-label');
+    btn.disabled = on;
+    btn.classList.toggle('is-loading', on);
+    if (!text) return;
+    if (on) {
+      btn.dataset.restore = text.textContent;
+      text.textContent = label;
+    } else if (btn.dataset.restore) {
+      text.textContent = btn.dataset.restore;
+    }
   }
 
   function mailtoFallback(data) {
@@ -436,7 +467,7 @@
       });
 
       if (firstInvalid) {
-        say('Please correct the highlighted fields.', true);
+        say(t('msgInvalid', 'Please check the highlighted fields.'), 'error');
         firstInvalid.focus();
         return;
       }
@@ -445,21 +476,24 @@
       delete data.website;
 
       const submitBtn = form.querySelector('button[type="submit"]');
-      const originalLabel = submitBtn ? submitBtn.innerHTML : '';
 
-      // No key configured yet: hand the enquiry to the visitor's mail client
+      // No key configured: hand the enquiry to the visitor's mail client
       // rather than pretending it was sent.
       if (!WEB3FORMS_KEY) {
-        say('Opening your email client with the details filled in…');
+        say(t('msgSending', 'Opening your email client…'), 'loading');
         mailtoFallback(data);
         return;
       }
 
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Sending…';
+      // An offline browser produces the same opaque "Failed to fetch" as a
+      // blocked request, so name the real cause while we can.
+      if (navigator.onLine === false) {
+        say(t('msgOffline', 'You appear to be offline. Check your connection and try again.'), 'error');
+        return;
       }
-      say('');
+
+      setLoading(submitBtn, true, t('btnSending', 'Sending…'));
+      say(t('msgSending', 'Sending your request…'), 'loading');
 
       const payload = Object.assign({}, data, {
         access_key: WEB3FORMS_KEY,
@@ -488,14 +522,15 @@
         }
 
         form.reset();
-        say('Thank you, your request is in. We will reply within one business day.');
+        say(t('msgSuccess', 'Thank you, your request is in.'), 'success');
       } catch (err) {
-        say('Something went wrong. Please email ' + FALLBACK_EMAIL + ' directly.', true);
+        // Keep what they typed, and always offer a way through that does
+        // not depend on this request working.
+        say(t('msgError', 'We could not send that.'), 'error',
+            ' <a href="mailto:' + FALLBACK_EMAIL + '">' + FALLBACK_EMAIL + '</a>');
+        if (window.console) console.error('[Vertex form]', err);
       } finally {
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = originalLabel;
-        }
+        setLoading(submitBtn, false);
       }
     });
   }

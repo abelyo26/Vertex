@@ -1319,15 +1319,106 @@ h1, h2, h3 { line-height: 1.15; letter-spacing: -0.022em; font-weight: 700; }
   text-align: center;
 }
 
+/* status panel: loading / success / error all share one box so the
+   form never changes height unexpectedly under the button */
 .form-status {
-  margin-top: 14px;
-  padding: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-top: 16px;
+  padding: 13px 15px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
   font-size: 0.9rem;
   font-weight: 500;
-  text-align: center;
+  line-height: 1.5;
+  text-align: left;
+  animation: statusIn 0.32s var(--ease);
+}
+.form-status[hidden] { display: none; }
+
+@keyframes statusIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* leading icon, drawn in CSS so there is no markup to localise */
+.form-status::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  flex: none;
+  margin-top: 1px;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 12px;
+}
+
+.form-status.is-loading {
+  border-color: var(--accent-ring);
+  background: var(--accent-soft);
+  color: var(--accent-bright);
+}
+.form-status.is-loading::before {
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  background: none;
+  animation: spin 0.7s linear infinite;
+}
+
+.form-status.is-success {
+  border-color: color-mix(in srgb, var(--success) 45%, transparent);
+  background: color-mix(in srgb, var(--success) 12%, transparent);
   color: var(--success);
 }
-.form-status.is-error { color: var(--danger); }
+.form-status.is-success::before {
+  background-color: var(--success);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.form-status.is-error {
+  border-color: color-mix(in srgb, var(--danger) 45%, transparent);
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+  color: var(--danger);
+}
+.form-status.is-error::before {
+  background-color: var(--danger);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 7v6M12 16.5v.5' fill='none' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+.form-status a {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* button loading state */
+.btn-spinner {
+  display: none;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+.btn.is-loading { cursor: progress; }
+.btn.is-loading .btn-spinner { display: block; }
+.btn.is-loading .btn-icon { display: none; }
+.btn:disabled { opacity: 0.75; }
+.btn:disabled:hover { transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-spinner,
+  .form-status.is-loading::before { animation-duration: 1.6s; }
+  .form-status { animation: none; }
+}
 
 /* ---------- 15. Footer ---------- */
 .site-footer {

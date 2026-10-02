@@ -716,7 +716,16 @@
         </ul>
       </div>
 
-      <form class="contact-form reveal" id="quoteForm" novalidate>
+      <form class="contact-form reveal" id="quoteForm" novalidate
+            data-msg-sending="Sending your request…"
+            data-msg-success="Thank you, your request is in. We will reply within one business day."
+            data-msg-error="We could not send that. Please email us directly, or call one of the numbers above."
+            data-msg-offline="You appear to be offline. Check your connection and try again."
+            data-msg-invalid="Please check the highlighted fields."
+            data-err-required="This field is required."
+            data-err-email="Enter a valid email address."
+            data-err-short="Please add a little more detail."
+            data-btn-sending="Sending…">
         <div class="field-row">
           <div class="field">
             <label for="name">Full name <span aria-hidden="true">*</span></label>
@@ -774,7 +783,8 @@
         </div>
 
         <button class="btn btn-primary btn-lg btn-block" type="submit">
-          Send request
+          <span class="btn-spinner" aria-hidden="true"></span>
+          <span class="btn-label">Send request</span>
           <svg viewBox="0 0 24 24" aria-hidden="true" class="btn-icon"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
 
@@ -782,7 +792,7 @@
           We reply within one business day. Your details are used only to prepare
           your quote.
         </p>
-        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+        <div class="form-status" id="formStatus" role="status" aria-live="polite" hidden></div>
       </form>
     </div>
   </section>
