@@ -336,14 +336,23 @@
      9. Quote form
      ----------------------------------------------------- */
   /* ------------------------------------------------------------------
-     To receive submissions, set ENDPOINT to a form backend URL, e.g.
-       Formspree:  https://formspree.io/f/xxxxxxx
-       Web3Forms:  https://api.web3forms.com/submit
-       Netlify:    add `data-netlify="true"` to the <form> instead
-     Leave it null and the form falls back to opening the visitor's
-     email client with everything pre-filled.
+     DELIVERY
+     GitHub Pages only serves files, so it cannot send mail itself. The
+     form posts to Web3Forms, which emails each submission to the address
+     the access key was issued to.
+
+     TO SWITCH IT ON: get a free key at https://web3forms.com/#start
+     (enter verteximportexport.et@gmail.com; the key arrives by email),
+     then paste it below. The key is meant to be public — it only lets
+     someone send mail TO that address, and the Web3Forms docs state it
+     is not a secret.
+
+     While the key is empty the form falls back to opening the visitor's
+     own email client with everything pre-filled, so it never silently
+     swallows an enquiry.
      ------------------------------------------------------------------ */
-  const ENDPOINT = null;
+  const WEB3FORMS_KEY = '';                                  // <-- paste key here
+  const ENDPOINT = 'https://api.web3forms.com/submit';
   const FALLBACK_EMAIL = 'verteximportexport.et@gmail.com';
 
   const form = document.getElementById('quoteForm');
@@ -438,7 +447,9 @@
       const submitBtn = form.querySelector('button[type="submit"]');
       const originalLabel = submitBtn ? submitBtn.innerHTML : '';
 
-      if (!ENDPOINT) {
+      // No key configured yet: hand the enquiry to the visitor's mail client
+      // rather than pretending it was sent.
+      if (!WEB3FORMS_KEY) {
         say('Opening your email client with the details filled in…');
         mailtoFallback(data);
         return;
@@ -450,14 +461,31 @@
       }
       say('');
 
+      const payload = Object.assign({}, data, {
+        access_key: WEB3FORMS_KEY,
+        subject: 'Quote request: ' + (data.company || data.name || 'new enquiry'),
+        from_name: 'Vertex website',
+        replyto: data.email,                       // one word, per the Web3Forms API
+        page_language: document.documentElement.lang || 'en'
+      });
+
       try {
         const res = await fetch(ENDPOINT, {
           method: 'POST',
           headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
+          body: JSON.stringify(payload)
         });
 
-        if (!res.ok) throw new Error('Request failed with status ' + res.status);
+        // Web3Forms documents the message at body.message but its own
+        // example reads it at the top level, so check both.
+        let json = {};
+        try { json = await res.json(); } catch (e) {}
+        const ok = res.ok && json.success !== false;
+
+        if (!ok) {
+          const detail = json.message || (json.body && json.body.message) || ('status ' + res.status);
+          throw new Error(detail);
+        }
 
         form.reset();
         say('Thank you, your request is in. We will reply within one business day.');
