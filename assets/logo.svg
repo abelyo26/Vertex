@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 64" width="300" height="64"
+     role="img" aria-label="Vertex Import &amp; Export">
+  <title>Vertex Import &amp; Export</title>
+  <!-- Mark -->
+  <g transform="translate(0 0)">
+    <path d="M10 20 L28 49 L54 14" fill="none" stroke="#3b82f6" stroke-width="7.5"
+          stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M21 20 L28 32 L41 15" fill="none" stroke="#93c5fd" stroke-width="4.6"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <!-- Wordmark. Text is live, not outlined: Inter must be available, or the
+       fallback stack is used. For print/partner assets, outline it first. -->
+  <text x="70" y="33" font-family="Inter, 'Helvetica Neue', Arial, sans-serif"
+        font-size="23" font-weight="800" letter-spacing="3.9" fill="#e8edf7">VERTEX</text>
+  <text x="71.5" y="46" font-family="Inter, 'Helvetica Neue', Arial, sans-serif"
+        font-size="9" font-weight="600" letter-spacing="1.85" fill="#6f7f99">IMPORT &amp; EXPORT</text>
+</svg>
